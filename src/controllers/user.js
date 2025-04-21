@@ -20,6 +20,9 @@ const registrar = async (req, res) => {
         console.log('########'+ user, password);
         const result = await Registrar(user, password);
         console.log('####result####'+ result);
+        if(result==='nuevo') return res.json({ ok: true, message: "Registro exitoso", user: user });
+        if(result==='existente') return res.json({ ok: false, message: "El usuario ya existe" });
+        return res.json({ ok: false, message: "Error al registrar el usuario" });  
     }catch (error) {
         res.status(500).json("Error en servidor: " + error.message);
     }

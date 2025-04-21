@@ -26,6 +26,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", routes);
 
-console.log(listEndpoints(routes));
+//console.log(listEndpoints(routes));
 
 module.exports = app;

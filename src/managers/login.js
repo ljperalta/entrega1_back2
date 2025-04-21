@@ -4,8 +4,8 @@ class loginManager
 {
   async login(user, password) {
       try {
-          const foundUser = await User.findOne({ username: user });
-          
+          const foundUser = await User.findOne({ email: user });
+
           if (!foundUser || foundUser.password !== password) {
           return false; // Usuario no encontrado o contraseña incorrecta
           }
@@ -19,20 +19,19 @@ class loginManager
   }
 
   async registrar(user, password){
-      console.log ('########22 ', user, password);
     try {
       const userExist = await User.findOne({ user });
       if (userExist) {
-        return ({ ok: false, text: 'Usuario ya registrado' });
+        return 'existente'; // El usuario ya existe
       }
 
-      const newUser = new User({ email: 'user', password: 'password', role: 'user', cart: 39, age: 40, first_name: 'Juan', last_name: 'Pérez' });
+      const newUser = new User({ email: user, password: password, role: 'user', cart: 39, age: 40, first_name: 'Juan', last_name: 'Pérez' });
       await newUser.save();
 
-      return ({ ok: true, text: 'Usuario registrado con éxito' });
+      return 'nuevo'; // Usuario registrado exitosamente
     } catch (err) {
       console.error(err);
-      return ({ ok: false, text: 'Error del servidor' });
+      return false; // Error al registrar el usuario
     }
   }
 
@@ -48,10 +47,10 @@ class loginManager
   }
 }
 
-const user = new loginManager();
+const useR = new loginManager();
 
 module.exports =  {
-                    Login: async () => await user.login(),
-                    Registrar: async () => await user.registrar(),  
-                    Logout: async () => await user.logout()
+                    Login: async (user, password) => await useR.login(user, password),
+                    Registrar: async (user, password) => await useR.registrar(user, password),  
+                    Logout: async () => await useR.logout()
                   }
