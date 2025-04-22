@@ -8,8 +8,6 @@ document.getElementById("registerForm").addEventListener("submit", async functio
   //const age = document.getElementById("age").value;
 
   try {
-    console.log(user_name, user_last, email, password);
-    console.log("Enviando datos al servidor...   http://localhost:8080/registrar");
     const response = await fetch("http://localhost:8080/registrar", {
       method: "POST",
       headers: {
@@ -29,7 +27,9 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     if (data.ok) {
       msg.textContent = data.message;
       msg.style.color = "green";
-      //Redirigir o mostrar mensaje
+      setTimeout(() => {
+        window.location.href = "../";
+      }, 2000)
     } else {
       msg.textContent = data.message;
       msg.style.color = "red";

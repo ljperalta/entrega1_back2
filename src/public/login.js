@@ -5,7 +5,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     const password = document.getElementById("password").value;
   
     const url = `http://localhost:8080/login?user=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}`;
-    console.log(url);
     try {
       const response = await fetch(url);
       const data = await response.json();

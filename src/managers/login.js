@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { hashPassword, comparePassword } = require('../utils/utils.js');
 
 class loginManager
 {
@@ -6,7 +7,7 @@ class loginManager
       try {
           const foundUser = await User.findOne({ email: user });
 
-          if (!foundUser || foundUser.password !== password) {
+          if (!foundUser || !comparePassword(foundUser, password)) {
           return false; // Usuario no encontrado o contraseña incorrecta
           }
 
@@ -24,7 +25,7 @@ class loginManager
       if (userExist) {
         return 'existente'; // El usuario ya existe
       }
-      
+      password = hashPassword(password); // Hashear la contraseña
       const newUser = new User({ email: user, password: password, role: 'user', cart: 39, age: 40, first_name: first_name, last_name: last_name });
       await newUser.save();
 
