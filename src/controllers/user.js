@@ -16,10 +16,10 @@ const login = async (req, res) => {
 
 const registrar = async (req, res) => {
     try {
-        const { user, password } = req.body;
-        console.log('########'+ user, password);
-        const result = await Registrar(user, password);
-        console.log('####result####'+ result);
+        const { first_name, last_name, user, password } = req.body;
+        
+        const result = await Registrar(first_name, last_name,user, password);
+        
         if(result==='nuevo') return res.json({ ok: true, message: "Registro exitoso", user: user });
         if(result==='existente') return res.json({ ok: false, message: "El usuario ya existe" });
         return res.json({ ok: false, message: "Error al registrar el usuario" });  

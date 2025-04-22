@@ -18,14 +18,14 @@ class loginManager
       }
   }
 
-  async registrar(user, password){
+  async registrar(first_name, last_name, user, password){
     try {
-      const userExist = await User.findOne({ user });
+      const userExist = await User.findOne({ email: user });
       if (userExist) {
         return 'existente'; // El usuario ya existe
       }
-
-      const newUser = new User({ email: user, password: password, role: 'user', cart: 39, age: 40, first_name: 'Juan', last_name: 'Pérez' });
+      
+      const newUser = new User({ email: user, password: password, role: 'user', cart: 39, age: 40, first_name: first_name, last_name: last_name });
       await newUser.save();
 
       return 'nuevo'; // Usuario registrado exitosamente
@@ -51,6 +51,6 @@ const useR = new loginManager();
 
 module.exports =  {
                     Login: async (user, password) => await useR.login(user, password),
-                    Registrar: async (user, password) => await useR.registrar(user, password),  
+                    Registrar: async (first_name, last_name,user, password) => await useR.registrar(first_name, last_name,user, password),  
                     Logout: async () => await useR.logout()
                   }

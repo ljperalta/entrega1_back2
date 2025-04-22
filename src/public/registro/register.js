@@ -8,12 +8,19 @@ document.getElementById("registerForm").addEventListener("submit", async functio
   //const age = document.getElementById("age").value;
 
   try {
-    const response = await fetch("http://localhost:8080/login/register", {
+    console.log(user_name, user_last, email, password);
+    console.log("Enviando datos al servidor...   http://localhost:8080/registrar");
+    const response = await fetch("http://localhost:8080/registrar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({
+        first_name: user_name,
+        last_name: user_last,
+        user: email,  // si el campo "user" representa el email
+        password
+      })
     });
 
     const data = await response.json();
