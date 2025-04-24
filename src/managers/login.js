@@ -46,6 +46,20 @@ class loginManager
           }
       });
   }
+
+  generateToken(user) {
+      const payload = { id: user._id, email: user.email };
+      return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+  }
+  verifyToken(token) {
+      try {
+          const decoded = jwt.verify(token, process.env.JWT_SECRET);
+          return decoded;
+      } catch (err) {
+          console.error("Error al verificar el token:", err);
+          return null;
+      }
+  } 
 }
 
 const useR = new loginManager();
