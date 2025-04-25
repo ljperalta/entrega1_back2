@@ -12,7 +12,7 @@ class loginManager
           return false; // Usuario no encontrado o contraseña incorrecta
           }
 
-          return true; // Autenticación exitosa
+          return foundUser; // Autenticación exitosa
 
       } catch (err) {
           console.error("Error en login:", err);
@@ -49,7 +49,7 @@ class loginManager
   }
 
   generateToken(user) {
-      const payload = { first_name: user.first_name, last_name: user.last_name ,email: user.email };
+      const payload = { id: user._id, first_name: user.first_name, last_name: user.last_name ,email: user.email };
       return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
   }
 }
