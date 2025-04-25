@@ -16,4 +16,3 @@ const verifyToken = async (jwtPayload, done) => {
 passport.use('jwt', new Strategy(opts, verifyToken));
 
 module.exports = passport;
-//module.exports.passport = passport;
