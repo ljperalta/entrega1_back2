@@ -1,43 +1,36 @@
 require("dotenv").config();
 const passport = require('passport');
-const jwt = require('passport-jwt');
-
-const JWTstrategy = jwt.Strategy;
-const ExtractJWT = jwt.ExtractJwt;
-const User = require('../models/user.js');  
+const { ExtractJwt, Strategy } = require('passport-jwt');
+const User = require('../managers/login.js');
 
 const opts = {
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET,
 };
 
-passport.use(new JWTstrategy(opts, async (jwt_payload, done) => {
-  try {
-        const user = await User.findById(jwt_payload.id);
-        if (user) {
-        return done(null, user);
-        } else {
-        return done(null, false);
-        }
-    } catch (error) {
-        return done(error, false);
-    }
+const verifyToken = async (jwtPayload, done) => {
+  if(!jwtPayload) return done(null, false);
+  return done(null, jwtPayload);
 }
-));
+
+passport.use('jwt', new Strategy(opts, verifyToken));
 
 passport.serializeUser((user, done) => {
-  done(null, user._id);
+  try {
+    done(null, user._id); 
+  } catch (error) {
+    done(error);
+  }
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.getUserById(id);
     done(null, user);
   } catch (error) {
     done(error, null);
   }
 });
-
 
 module.exports = passport;
 //module.exports.passport = passport;

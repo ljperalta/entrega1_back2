@@ -27,18 +27,8 @@ const registrar = async (req, res) => {
         res.status(500).json("Error en servidor: " + error.message);
     }
 }
-const logout = async (req, res) => {
-    console.log('+++++++++++++++');
-    try {
-        const result = await Logout(req, res);
-        return res.json({ ok: true, message: "Logout exitoso" });
-    } catch (error) {
-        res.status(500).json("Error en servidor: " + error.message);
-    }
-};
 
 module.exports = {
     loginn: login,
-    registrarr: registrar,
-    logoutt: logout
+    registrarr: registrar
 };

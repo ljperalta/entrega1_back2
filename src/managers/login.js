@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const { hashPassword, comparePassword } = require('../utils/utils.js');
+const jwt = require('jsonwebtoken');
 
 class loginManager
 {
@@ -36,36 +37,23 @@ class loginManager
     }
   }
 
-  async logout(){
-      req.session.destroy(err => {
-          if (!err) {
-              res.clearCookie('connect.sid');
-              res.send('Logout successful');
-          }else {
-              res.status(500).send({status: 'Error', body: err});
-          }
-      });
+  async getUserById(id) {
+      try {
+          const user = await User.findById(id);
+          if (!user) { return null; } 
+    
+          return user;
+      } catch (err) {
+          throw err; // Error al buscar el usuario
+      } 
   }
 
   generateToken(user) {
-      const payload = { id: user._id, email: user.email };
+      const payload = { first_name: user.first_name, last_name: user.last_name ,email: user.email };
       return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
   }
-  verifyToken(token) {
-      try {
-          const decoded = jwt.verify(token, process.env.JWT_SECRET);
-          return decoded;
-      } catch (err) {
-          console.error("Error al verificar el token:", err);
-          return null;
-      }
-  } 
 }
 
 const useR = new loginManager();
 
-module.exports =  {
-                    Login: async (user, password) => await useR.login(user, password),
-                    Registrar: async (first_name, last_name,user, password) => await useR.registrar(first_name, last_name,user, password),  
-                    Logout: async () => await useR.logout()
-                  }
+module.exports = useR;
